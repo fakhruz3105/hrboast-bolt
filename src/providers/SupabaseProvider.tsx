@@ -26,10 +26,13 @@ export const SupabaseProvider: React.FC<SupabaseProviderProps> = ({
   
   useEffect(() => {
     const fetchSupabaseEnv = async () => {
+      const link = window.location.host;
+      const slug = link.split('.').length > 1 ? link.split('.')[0] : 'mtb';
+
       const { data, error } = await supabaseManager
         .from('hrboasts')
         .select('*')
-        .eq('slug', 'localhost')
+        .eq('slug', slug)
         .single();
 
       if (error) {
