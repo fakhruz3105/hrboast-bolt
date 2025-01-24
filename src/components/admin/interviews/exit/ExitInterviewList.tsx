@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../../contexts/AuthContext';
-import { supabase } from '../../../../lib/supabase';
 import { Eye, Download, Trash2 } from 'lucide-react';
 import ExitInterviewViewer from './ExitInterviewViewer';
 import { toast } from 'react-hot-toast';
 import { generateExitInterviewPDF } from '../../../../utils/exitInterviewPDF';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 export default function ExitInterviewList() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [interviews, setInterviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Letter } from '../../../../types/letter';
-import { supabase } from '../../../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   letter: Letter;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function ShowCauseResponse({ letter, onSubmit }: Props) {
+  const supabase = useSupabase();
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
 

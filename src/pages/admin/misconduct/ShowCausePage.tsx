@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaff } from '../../../hooks/useStaff';
 import ShowCauseForm from '../../../components/admin/misconduct/show-cause/ShowCauseForm';
 import ShowCauseList from '../../../components/admin/misconduct/show-cause/ShowCauseList';
@@ -8,8 +7,10 @@ import ShowCauseViewer from '../../../components/admin/misconduct/show-cause/Sho
 import { ShowCauseFormData } from '../../../types/showCause';
 import { Letter } from '../../../types/letter';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function ShowCausePage() {
+  const supabase = useSupabase();
   const { staff, loading: staffLoading } = useStaff();
   const [letters, setLetters] = useState<Letter[]>([]);
   const [showForm, setShowForm] = useState(false);

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { supabase, getCompanyClient } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { Staff } from '../types/staff';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useCompanyStaff() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [staff, setStaff] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,13 +20,8 @@ export function useCompanyStaff() {
   const loadStaff = async () => {
     try {
       setLoading(true);
-      const companyClient = await getCompanyClient(user!.id);
-      
-      if (!companyClient) {
-        throw new Error('Could not connect to company database');
-      }
 
-      const { data, error } = await companyClient
+      const { data, error } = await supabase
         .from('staff')
         .select(`
           *,
@@ -68,13 +64,7 @@ export function useCompanyStaff() {
 
   const addStaff = async (staffData: Partial<Staff>) => {
     try {
-      const companyClient = await getCompanyClient(user!.id);
-      
-      if (!companyClient) {
-        throw new Error('Could not connect to company database');
-      }
-
-      const { data, error } = await companyClient
+      const { data, error } = await supabase
         .from('staff')
         .insert([staffData])
         .select()
@@ -92,13 +82,7 @@ export function useCompanyStaff() {
 
   const updateStaff = async (id: string, updates: Partial<Staff>) => {
     try {
-      const companyClient = await getCompanyClient(user!.id);
-      
-      if (!companyClient) {
-        throw new Error('Could not connect to company database');
-      }
-
-      const { data, error } = await companyClient
+      const { data, error } = await supabase
         .from('staff')
         .update(updates)
         .eq('id', id)
@@ -117,13 +101,7 @@ export function useCompanyStaff() {
 
   const deleteStaff = async (id: string) => {
     try {
-      const companyClient = await getCompanyClient(user!.id);
-      
-      if (!companyClient) {
-        throw new Error('Could not connect to company database');
-      }
-
-      const { error } = await companyClient
+      const { error } = await supabase
         .from('staff')
         .delete()
         .eq('id', id);

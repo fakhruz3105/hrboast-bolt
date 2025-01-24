@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { BenefitClaim } from '../../../types/benefit';
 import ClaimsList from '../../../components/admin/benefits/claims/ClaimsList';
 import ClaimViewer from '../../../components/admin/benefits/claims/ClaimViewer';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function ClaimsPage() {
+  const supabase = useSupabase();
   const [claims, setClaims] = useState<BenefitClaim[]>([]);
   const [selectedClaim, setSelectedClaim] = useState<BenefitClaim | null>(null);
   const [loading, setLoading] = useState(true);

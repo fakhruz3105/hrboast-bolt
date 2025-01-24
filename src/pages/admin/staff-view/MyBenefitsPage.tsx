@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
 import { Gift, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Benefit = {
   id: string;
@@ -15,6 +15,7 @@ type Benefit = {
 };
 
 export default function MyBenefitsPage() {
+  const supabase = useSupabase();
   const { staff } = useStaffProfile();
   const [benefits, setBenefits] = useState<Benefit[]>([]);
   const [loading, setLoading] = useState(true);

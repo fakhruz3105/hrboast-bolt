@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
 import { 
   Calendar, 
   Building2, 
@@ -14,6 +13,7 @@ import {
   Users
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useSupabase } from '../../providers/SupabaseProvider';
 
 type DashboardStats = {
   totalStaff: number;
@@ -29,6 +29,7 @@ type DashboardStats = {
 };
 
 export default function DashboardPage() {
+  const supabase = useSupabase();
   const [stats, setStats] = useState<DashboardStats>({
     totalStaff: 0,
     totalDepartments: 0,

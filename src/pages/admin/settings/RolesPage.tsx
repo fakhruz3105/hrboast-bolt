@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { RoleMapping } from '../../../types/role';
 import RolesList from '../../../components/admin/settings/roles/RolesList';
 import RoleMappingForm from '../../../components/admin/settings/roles/RoleMappingForm';
 import { useStaffLevels } from '../../../hooks/useStaffLevels';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function RolesPage() {
+  const supabase = useSupabase();
   const { levels, loading: levelsLoading } = useStaffLevels();
   const [roleMappings, setRoleMappings] = useState<RoleMapping[]>([]);
   const [loading, setLoading] = useState(true);

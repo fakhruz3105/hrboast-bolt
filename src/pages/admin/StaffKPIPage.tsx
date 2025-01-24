@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Target, Calendar, MessageSquare, AlertCircle, CheckCircle, Clock, Trash2 } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../providers/SupabaseProvider';
 
 type KPI = {
   id: string;
@@ -38,6 +38,7 @@ type Staff = {
 };
 
 export default function StaffKPIPage() {
+  const supabase = useSupabase();
   const [kpis, setKpis] = useState<KPI[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [staffMembers, setStaffMembers] = useState<Staff[]>([]);

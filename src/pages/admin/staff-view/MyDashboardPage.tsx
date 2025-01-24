@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
-import { supabase } from '../../../lib/supabase';
 import { 
   Calendar, 
   Building2, 
@@ -16,8 +15,10 @@ import {
 import { Link } from 'react-router-dom';
 import ScoreDisplay from '../../../components/admin/evaluation/ScoreDisplay';
 import { EvaluationResponse } from '../../../types/evaluation';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MyDashboardPage() {
+  const supabase = useSupabase();
   const { staff, loading } = useStaffProfile();
   const [evaluations, setEvaluations] = useState<EvaluationResponse[]>([]);
   const [benefits, setBenefits] = useState<any[]>([]);

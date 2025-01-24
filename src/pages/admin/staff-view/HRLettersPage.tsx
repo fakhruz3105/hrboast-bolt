@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
-import { supabase } from '../../../lib/supabase';
 import { FileText, AlertCircle, Search, Filter, Clock, CheckCircle } from 'lucide-react';
 import LetterViewer from '../../../components/admin/staff-view/letters/LetterViewer';
 import { Letter } from '../../../types/letter';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type LetterType = 'warning' | 'interview' | 'show_cause' | 'all';
 
 export default function HRLettersPage() {
+  const supabase = useSupabase();
   const { staff } = useStaffProfile();
   const [letters, setLetters] = useState<Letter[]>([]);
   const [loading, setLoading] = useState(true);

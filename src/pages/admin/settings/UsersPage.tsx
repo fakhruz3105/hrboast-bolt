@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { Lock, Unlock, KeyRound, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type User = {
   id: string;
@@ -24,6 +24,7 @@ type User = {
 };
 
 export default function UsersPage() {
+  const supabase = useSupabase();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showResetPassword, setShowResetPassword] = useState(false);

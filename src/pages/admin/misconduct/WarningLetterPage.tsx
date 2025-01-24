@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaff } from '../../../hooks/useStaff';
 import WarningLetterForm from '../../../components/admin/misconduct/warning/WarningLetterForm';
 import WarningLetterList from '../../../components/admin/misconduct/warning/WarningLetterList';
 import WarningLetterViewer from '../../../components/admin/misconduct/warning/WarningLetterViewer';
 import { WarningLetterFormData } from '../../../types/warningLetter';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function WarningLetterPage() {
+  const supabase = useSupabase();
   const { staff, loading: staffLoading } = useStaff();
   const [letters, setLetters] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);

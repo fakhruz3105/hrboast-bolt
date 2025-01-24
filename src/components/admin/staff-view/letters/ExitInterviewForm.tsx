@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../../../lib/supabase';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   letterId: string;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function ExitInterviewForm({ letterId, staffId, onSubmit, onCancel }: Props) {
+  const supabase = useSupabase();
   const [formData, setFormData] = useState({
     reason: '',
     detailedReason: '',

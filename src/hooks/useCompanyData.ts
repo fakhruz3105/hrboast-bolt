@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase, getCompanyClient } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useCompanyData<T>(tableName: string) {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);

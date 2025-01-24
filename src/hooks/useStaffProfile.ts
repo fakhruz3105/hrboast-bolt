@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { Staff } from '../types/staff';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useStaffProfile() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [staff, setStaff] = useState<Staff | null>(null);
   const [loading, setLoading] = useState(true);

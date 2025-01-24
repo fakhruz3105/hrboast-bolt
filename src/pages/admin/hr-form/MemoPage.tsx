@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Medal, Gift, TrendingUp, DollarSign, Eye, Edit, Trash2, Download } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useDepartments } from '../../../hooks/useDepartments';
 import { useStaff } from '../../../hooks/useStaff';
 import { MemoType } from '../../../types/memo';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { generateMemoPDF } from '../../../utils/memoPDF';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MemoPage() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const { departments } = useDepartments();
   const { staff } = useStaff();

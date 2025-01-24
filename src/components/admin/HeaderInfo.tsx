@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Building2, User } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { supabase } from '../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../providers/SupabaseProvider';
 
 export default function HeaderInfo() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [companyName, setCompanyName] = useState<string>('');
   const [staffName, setStaffName] = useState<string>('');

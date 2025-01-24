@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
 import InventoryForm from '../../../components/admin/inventory/InventoryForm';
 import InventoryList from '../../../components/admin/inventory/InventoryList';
 import InventoryViewer from '../../../components/admin/inventory/InventoryViewer';
 import { InventoryItem, InventoryFormData } from '../../../types/inventory';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MyInventoryPage() {
+  const supabase = useSupabase();
   const { staff } = useStaffProfile();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);

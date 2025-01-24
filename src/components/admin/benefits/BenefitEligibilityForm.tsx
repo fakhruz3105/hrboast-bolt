@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { StaffLevel } from '../../../types/staffLevel';
 import { X, Info } from 'lucide-react';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Props = {
   benefitId: string;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function BenefitEligibilityForm({ benefitId, onClose }: Props) {
+  const supabase = useSupabase();
   const [levels, setLevels] = useState<StaffLevel[]>([]);
   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);

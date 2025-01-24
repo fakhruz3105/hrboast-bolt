@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { ExitInterview, ExitInterviewFormData } from '../types/exitInterview';
-import { supabase } from '../lib/supabase';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useExitInterviews() {
+  const supabase = useSupabase();
   const [interviews, setInterviews] = useState<ExitInterview[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

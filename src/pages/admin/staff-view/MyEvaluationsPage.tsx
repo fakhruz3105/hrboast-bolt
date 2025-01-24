@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { EvaluationResponse } from '../../../types/evaluation';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
@@ -9,8 +8,10 @@ import SelfEvaluationForm from '../../../components/admin/staff-view/evaluations
 import EvaluationStats from '../../../components/admin/staff-view/evaluations/EvaluationStats';
 import { Table as Tabs } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MyEvaluationsPage() {
+  const supabase = useSupabase();
   const { staff } = useStaffProfile();
   const [myEvaluations, setMyEvaluations] = useState<EvaluationResponse[]>([]);
   const [teamEvaluations, setTeamEvaluations] = useState<EvaluationResponse[]>([]);

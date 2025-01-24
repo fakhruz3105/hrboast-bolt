@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Building2, Mail, Phone, MapPin, FileText, Save } from 'lucide-react';
-import { supabase } from '../../../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type CompanyDetailsProps = {
   initialData?: {
@@ -15,6 +15,7 @@ type CompanyDetailsProps = {
 };
 
 export default function CompanyDetails({ initialData, onSave }: CompanyDetailsProps) {
+  const supabase = useSupabase();
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     ssm: initialData?.ssm || '',

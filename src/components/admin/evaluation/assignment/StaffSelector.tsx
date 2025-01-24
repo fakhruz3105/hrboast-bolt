@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../../lib/supabase';
 import { Staff } from '../../../../types/staff';
 import { Search, UserCheck } from 'lucide-react';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   selectedDepartments: string[];
@@ -11,6 +11,7 @@ type Props = {
 };
 
 export default function StaffSelector({ selectedDepartments, selectedStaff, onChange, staffLevel }: Props) {
+  const supabase = useSupabase();
   const [staff, setStaff] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Department, DepartmentFormData } from '../types/department';
-import * as departmentsApi from '../lib/api/departments';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useDepartments() {
+  const supabase = useSupabase();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -10,7 +11,12 @@ export function useDepartments() {
   async function loadDepartments() {
     try {
       setLoading(true);
-      const data = await departmentsApi.fetchDepartments();
+      const { data, error } = await supabase
+        .from('departments')
+        .select('*')
+        .order('name');
+        
+      if (error) throw new Error(`Failed to fetch departments: ${error.message}`);
       setDepartments(data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to load departments'));
@@ -25,9 +31,15 @@ export function useDepartments() {
 
   async function addDepartment(department: DepartmentFormData) {
     try {
-      const newDepartment = await departmentsApi.createDepartment(department);
-      setDepartments(prev => [...prev, newDepartment]);
-      return newDepartment;
+      const { data, error } = await supabase
+        .from('departments')
+        .insert([department])
+        .select()
+        .single();
+        
+      if (error) throw new Error(`Failed to create department: ${error.message}`);
+      setDepartments(prev => [...prev, data]);
+      return data;
     } catch (err) {
       throw err instanceof Error ? err : new Error('Failed to add department');
     }
@@ -35,9 +47,16 @@ export function useDepartments() {
 
   async function updateDepartment(id: string, updates: Partial<DepartmentFormData>) {
     try {
-      const updatedDepartment = await departmentsApi.updateDepartment(id, updates);
-      setDepartments(prev => prev.map(dept => dept.id === id ? updatedDepartment : dept));
-      return updatedDepartment;
+      const { data, error } = await supabase
+        .from('departments')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+        
+      if (error) throw new Error(`Failed to update department: ${error.message}`);
+      setDepartments(prev => prev.map(dept => dept.id === id ? data : dept));
+      return data;
     } catch (err) {
       throw err instanceof Error ? err : new Error('Failed to update department');
     }
@@ -45,7 +64,16 @@ export function useDepartments() {
 
   async function deleteDepartment(id: string) {
     try {
-      await departmentsApi.deleteDepartment(id);
+      const { error } = await supabase
+        .rpc('delete_department', { p_department_id: id });
+        
+      if (error) {
+        // Check for specific error about staff members
+        if (error.message.includes('has staff members')) {
+          throw new Error('Cannot delete department that has staff members assigned to it');
+        }
+        throw new Error(`Failed to delete department: ${error.message}`);
+      }
       setDepartments(prev => prev.filter(dept => dept.id !== id));
     } catch (err) {
       throw err instanceof Error ? err : new Error('Failed to delete department');

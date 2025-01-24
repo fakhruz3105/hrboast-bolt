@@ -39,7 +39,6 @@ export default function AllStaffPage() {
       setEditingStaff(null);
     } catch (err) {
       console.error('Error saving staff:', err);
-      alert('Failed to save staff member. Please try again.');
     }
   };
 

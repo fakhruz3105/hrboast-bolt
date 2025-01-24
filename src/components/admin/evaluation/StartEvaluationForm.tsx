@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Search, CheckCircle, UserCheck } from 'lucide-react';
 import { EvaluationForm } from '../../../types/evaluation';
 import { Staff } from '../../../types/staff';
-import { supabase } from '../../../lib/supabase';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Props = {
   evaluation: EvaluationForm;
@@ -11,6 +11,7 @@ type Props = {
 };
 
 export default function StartEvaluationForm({ evaluation, onSubmit, onClose }: Props) {
+  const supabase = useSupabase();
   const [departments, setDepartments] = useState<{id: string; name: string}[]>([]);
   const [selectedDepartments, setSelectedDepartments] = useState<Set<string>>(new Set());
   const [staff, setStaff] = useState<Staff[]>([]);

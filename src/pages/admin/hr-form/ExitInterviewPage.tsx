@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaff } from '../../../hooks/useStaff';
 import StaffSelector from '../../../components/admin/staff/StaffSelector';
 import ExitInterviewList from '../../../components/admin/interviews/exit/ExitInterviewList';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function ExitInterviewPage() {
+  const supabase = useSupabase();
   const { staff, loading: staffLoading } = useStaff();
   const [showStaffSelector, setShowStaffSelector] = useState(false);
   const [loading, setLoading] = useState(false);

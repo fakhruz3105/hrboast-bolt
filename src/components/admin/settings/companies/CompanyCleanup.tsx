@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Trash2, RefreshCw, AlertCircle } from 'lucide-react';
-import { supabase } from '../../../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   companyId: string;
@@ -11,6 +11,7 @@ type Props = {
 type CleanupType = 'inactive_staff' | 'expired_benefits' | 'old_evaluations' | 'old_warnings' | 'old_memos' | 'all';
 
 export default function CompanyCleanup({ companyId, onCleanupComplete }: Props) {
+  const supabase = useSupabase();
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedType, setSelectedType] = useState<CleanupType>('all');
   const [loading, setLoading] = useState(false);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useStaffProfile } from '../../../hooks/useStaffProfile';
-import { supabase } from '../../../lib/supabase';
 import { Medal, Gift, TrendingUp, DollarSign, Search } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { Memo } from '../../../types/memo';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MemoPage() {
+  const supabase = useSupabase();
   const { staff } = useStaffProfile();
   const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);

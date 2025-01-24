@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, Filter, Gift, Clock, CheckCircle, AlertCircle } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../contexts/AuthContext';
 import BenefitList from '../../../components/admin/benefits/BenefitList';
 import BenefitForm from '../../../components/admin/benefits/BenefitForm';
 import BenefitEligibilityForm from '../../../components/admin/benefits/BenefitEligibilityForm';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Benefit = {
   id: string;
@@ -18,6 +18,7 @@ type Benefit = {
 };
 
 export default function ManageBenefitsPage() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [benefits, setBenefits] = useState<Benefit[]>([]);
   const [showForm, setShowForm] = useState(false);

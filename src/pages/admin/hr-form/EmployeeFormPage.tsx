@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Eye, Edit, Trash2, Link as LinkIcon } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaffLevels } from '../../../hooks/useStaffLevels';
 import { useDepartments } from '../../../hooks/useDepartments';
 import { useAuth } from '../../../contexts/AuthContext';
@@ -8,8 +7,10 @@ import CreateFormRequest from '../../../components/admin/hr-form/employee/Create
 import ResponseViewer from '../../../components/admin/hr-form/employee/ResponseViewer';
 import EditFormRequest from '../../../components/admin/hr-form/employee/EditFormRequest';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function EmployeeFormPage() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const { levels } = useStaffLevels();
   const { departments } = useDepartments();

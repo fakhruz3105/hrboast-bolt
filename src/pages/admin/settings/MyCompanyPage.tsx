@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { Building2, Mail, Phone, MapPin, Calendar, Users } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import CompanyDetails from '../../../components/admin/settings/company/CompanyDetails';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Company = {
   id: string;
@@ -21,6 +21,7 @@ type Company = {
 };
 
 export default function MyCompanyPage() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);

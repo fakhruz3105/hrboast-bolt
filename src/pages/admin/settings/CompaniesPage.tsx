@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { Plus, Lock, Unlock, Edit, Trash2, KeyRound } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../../contexts/AuthContext';
 import CompanyCleanup from '../../../components/admin/settings/companies/CompanyCleanup';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Company = {
   id: string;
@@ -24,6 +24,7 @@ type PasswordFormData = {
 };
 
 export default function CompaniesPage() {
+  const supabase = useSupabase();
   const { user } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);

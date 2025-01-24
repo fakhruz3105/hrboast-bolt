@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { useSupabase } from '../../providers/SupabaseProvider';
 
 type Props = {
   formRequest: any;
 };
 
 export default function EmployeeForm({ formRequest }: Props) {
+  const supabase = useSupabase();
   const [formData, setFormData] = useState({
     personal_info: {
       fullName: formRequest.staff_name,

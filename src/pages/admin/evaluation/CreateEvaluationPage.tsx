@@ -1,8 +1,9 @@
 import React from 'react';
-import { supabase } from '../../../lib/supabase';
 import EvaluationForm from '../../../components/admin/evaluation/EvaluationForm';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function CreateEvaluationPage() {
+  const supabase = useSupabase();
   const handleSubmit = async (formData: {
     title: string;
     type: 'quarter' | 'half-year' | 'yearly';

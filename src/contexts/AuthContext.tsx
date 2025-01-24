@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 type User = {
   id: string;
@@ -40,6 +40,7 @@ const DEMO_USERS = {
 };
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const supabase = useSupabase();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

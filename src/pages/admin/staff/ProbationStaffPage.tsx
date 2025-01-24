@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
 import { CheckCircle, XCircle, AlertCircle, Calendar, Clock, UserCheck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type ProbationStaff = {
   id: string;
@@ -15,6 +15,7 @@ type ProbationStaff = {
 };
 
 export default function ProbationStaffPage() {
+  const supabase = useSupabase();
   const [staff, setStaff] = useState<ProbationStaff[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStaff, setSelectedStaff] = useState<ProbationStaff | null>(null);

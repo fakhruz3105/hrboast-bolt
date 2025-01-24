@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../../lib/supabase';
 import { Staff } from '../../../../types/staff';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   selectedDepartments: string[];
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function ManagerSelector({ selectedDepartments, selectedManager, onChange, managerLevel }: Props) {
+  const supabase = useSupabase();
   const [managers, setManagers] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(true);
 

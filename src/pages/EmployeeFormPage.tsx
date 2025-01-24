@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
 import EmployeeForm from '../components/staff/EmployeeForm';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export default function EmployeeFormPage() {
+  const supabase = useSupabase();
   const { formId } = useParams();
   const [formRequest, setFormRequest] = useState<any>(null);
   const [loading, setLoading] = useState(true);

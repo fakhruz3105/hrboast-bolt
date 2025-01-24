@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { useStaff } from '../../../hooks/useStaff';
 import InventoryList from '../../../components/admin/inventory/InventoryList';
 import InventoryForm from '../../../components/admin/inventory/InventoryForm';
@@ -8,8 +7,10 @@ import InventoryViewer from '../../../components/admin/inventory/InventoryViewer
 import { InventoryItem, InventoryFormData } from '../../../types/inventory';
 import { Staff } from '../../../types/staff';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function OfficeInventoryPage() {
+  const supabase = useSupabase();
   const { staff } = useStaff();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);

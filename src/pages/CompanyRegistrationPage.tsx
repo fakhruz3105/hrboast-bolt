@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Building2, Mail, Phone, MapPin, User, Lock } from 'lucide-react';
-import { supabase } from '../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../providers/SupabaseProvider';
 
 export default function CompanyRegistrationPage() {
+  const supabase = useSupabase();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({

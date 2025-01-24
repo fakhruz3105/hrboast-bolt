@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../../lib/supabase';
 import { Department } from '../../../../types/department';
 import { CheckCircle } from 'lucide-react';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
   selectedDepartments: string[];
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export default function DepartmentSelector({ selectedDepartments, onChange }: Props) {
+  const supabase = useSupabase();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [loading, setLoading] = useState(true);
 

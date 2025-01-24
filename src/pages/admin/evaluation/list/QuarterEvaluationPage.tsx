@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../../../lib/supabase';
 import { EvaluationForm, EvaluationResponse } from '../../../../types/evaluation';
 import EvaluationList from '../../../../components/admin/evaluation/EvaluationList';
 import EvaluationDetails from '../../../../components/admin/evaluation/EvaluationDetails';
@@ -7,8 +6,10 @@ import AssignmentForm from '../../../../components/admin/evaluation/assignment/A
 import AssignedEvaluationsList from '../../../../components/admin/evaluation/AssignedEvaluationsList';
 import EvaluationResponseDetails from '../../../../components/admin/evaluation/details/EvaluationResponseDetails';
 import EvaluationStats from '../../../../components/admin/evaluation/EvaluationStats';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 export default function QuarterEvaluationPage() {
+  const supabase = useSupabase();
   const [evaluations, setEvaluations] = useState<EvaluationForm[]>([]);
   const [assignments, setAssignments] = useState<EvaluationResponse[]>([]);
   const [loading, setLoading] = useState(true);

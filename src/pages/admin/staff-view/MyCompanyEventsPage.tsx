@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type Event = {
   id: string;
@@ -15,6 +15,7 @@ type Event = {
 };
 
 export default function MyCompanyEventsPage() {
+  const supabase = useSupabase();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 

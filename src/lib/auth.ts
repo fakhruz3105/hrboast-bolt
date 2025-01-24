@@ -1,5 +1,3 @@
-import { supabase } from './supabase';
-
 // Simple auth without Supabase authentication
 const ADMIN_CREDENTIALS = {
   email: 'admin@example.com',

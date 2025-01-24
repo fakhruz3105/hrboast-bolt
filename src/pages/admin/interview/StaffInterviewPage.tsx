@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Link as LinkIcon, Eye, Pencil, Trash2 } from 'lucide-react';
-import { supabase } from '../../../lib/supabase';
 import ResponseViewer from '../../../components/admin/interviews/ResponseViewer';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 type FormLink = {
   id: string;
@@ -13,6 +13,7 @@ type FormLink = {
 };
 
 export default function StaffInterviewPage() {
+  const supabase = useSupabase();
   const [formLinks, setFormLinks] = useState<FormLink[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [loading, setLoading] = useState(false);

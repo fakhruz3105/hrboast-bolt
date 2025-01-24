@@ -6,11 +6,12 @@ import DepartmentList from '../../../components/admin/departments/DepartmentList
 import DepartmentForm from '../../../components/admin/departments/DepartmentForm';
 import { useDepartments } from '../../../hooks/useDepartments';
 import { useStaffLevels } from '../../../hooks/useStaffLevels';
-import { supabase } from '../../../lib/supabase';
 import ErrorAlert from '../../../components/ui/ErrorAlert';
 import { toast } from 'react-hot-toast';
+import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function DepartmentsPage() {
+  const supabase = useSupabase();
   const { departments, loading, error, addDepartment, updateDepartment, deleteDepartment } = useDepartments();
   const { levels, loading: levelsLoading } = useStaffLevels();
   const [showForm, setShowForm] = useState(false);
