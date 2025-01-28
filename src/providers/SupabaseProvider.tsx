@@ -26,22 +26,26 @@ export const SupabaseProvider: React.FC<SupabaseProviderProps> = ({
   
   useEffect(() => {
     const fetchSupabaseEnv = async () => {
-      const link = window.location.host;
-      const slug = link.split('.').length > 1 ? link.split('.')[0] : 'mtb';
-
-      const { data, error } = await supabaseManager
-        .from('hrboasts')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-
-      if (error) {
+      try {
+        const link = window.location.host;
+        const slug = link.split('.hrboast.com').length > 1 ? link.split('.hrboast.com')[0] : 'mtb';
+        console.log("slug >>", slug);
+  
+        const { data, error } = await supabaseManager
+          .from('hrboasts')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+  
+        if (error) {
+          throw error;
+        }
+  
+        setSupabaseUrl(data.supabase_url);
+        setSupabaseKey(data.supabase_anon_key);
+      } catch (error) {
         console.error('Error fetching tenant data:', error);
-        return;
       }
-
-      setSupabaseUrl(data.supabase_url);
-      setSupabaseKey(data.supabase_anon_key);
     };
 
     fetchSupabaseEnv();
