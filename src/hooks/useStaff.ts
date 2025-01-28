@@ -48,7 +48,6 @@ export function useStaff() {
       setStaff(data as Staff[]);
       setError(null);
     } catch (err) {
-      console.log("err >>", err);
       const error = err instanceof Error ? err : new Error('Failed to load staff');
       setError(error);
       toast.error(error.message);
@@ -157,7 +156,6 @@ export function useStaff() {
       toast.success('Staff member added successfully');
       return completeStaff;
     } catch (err) {
-      console.log("err >>", err);
       const error = err instanceof Error ? err : new Error('Failed to add staff');
       toast.error(error.message);
       throw error;
