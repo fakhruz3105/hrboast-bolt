@@ -70,6 +70,12 @@ export function useStaff() {
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
 
+      const { data: roleMap } = await supabase
+        .from('role_mappings')
+        .select('*')
+        .eq('staff_level_id', staffMember.primary_level_id)
+        .single();
+
       // First create the staff record
       const { data: newStaff, error: staffError } = await supabase
         .from('staff')
@@ -81,7 +87,7 @@ export function useStaff() {
           status: staffMember.status,
           company_id: user?.user_metadata?.company_id,
           is_active: true,
-          role_id: staffMember.role_id
+          role_id: roleMap?.id
         }])
         .select()
         .single();
@@ -151,6 +157,7 @@ export function useStaff() {
       toast.success('Staff member added successfully');
       return completeStaff;
     } catch (err) {
+      console.log("err >>", err);
       const error = err instanceof Error ? err : new Error('Failed to add staff');
       toast.error(error.message);
       throw error;
