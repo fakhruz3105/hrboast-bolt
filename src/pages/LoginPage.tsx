@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Building2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
@@ -16,51 +16,34 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  // Function to fetch company name
-  const fetchCompanyName = async (email: string) => {
-    try {
-      // First try to find company by admin email
-      const { data: companyData, error: companyError } = await supabase
-        .from('companies')
-        .select('name')
-        .eq('email', email)
-        .maybeSingle();
-
-      if (!companyError && companyData) {
-        setCompanyName(companyData.name);
-        return;
-      }
-
-      // If not found, try to find staff's company
-      const { data: staffData, error: staffError } = await supabase
-        .from('staff')
-        .select(`
-          company:company_id (
-            name
-          )
-        `)
-        .eq('email', email)
-        .maybeSingle();
-
-      if (!staffError && staffData?.company) {
-        setCompanyName(staffData.company.name);
-      } else {
+  useEffect(() => {
+    const fetchCompanyName = async () => {
+      try {
+        // First try to find company by admin email
+        const { data: companyData, error: companyError } = await supabase
+          .from('companies')
+          .select('name')
+          .limit(1)
+          .single();
+  
+        if (!companyError && companyData) {
+          setCompanyName(companyData.name);
+          return;
+        }
+  
+        setCompanyName(null);
+      } catch (error) {
+        console.error('Error fetching company:', error);
         setCompanyName(null);
       }
-    } catch (error) {
-      console.error('Error fetching company:', error);
-      setCompanyName(null);
-    }
-  };
+    };
+
+    fetchCompanyName();
+  }, []);
 
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setEmail(newEmail);
-    if (newEmail) {
-      await fetchCompanyName(newEmail);
-    } else {
-      setCompanyName(null);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,6 +86,16 @@ export default function LoginPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            {companyName && (
+              <div className="bg-gray-50 p-3 rounded-lg flex items-center">
+                <Building2 className="h-5 w-5 text-gray-400 mr-2" />
+                <div>
+                  <p className="text-sm text-gray-500">Company</p>
+                  <p className="font-medium text-gray-900">{companyName}</p>
+                </div>
+              </div>
+            )}
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
@@ -124,16 +117,6 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-
-            {companyName && (
-              <div className="bg-gray-50 p-3 rounded-lg flex items-center">
-                <Building2 className="h-5 w-5 text-gray-400 mr-2" />
-                <div>
-                  <p className="text-sm text-gray-500">Company</p>
-                  <p className="font-medium text-gray-900">{companyName}</p>
-                </div>
-              </div>
-            )}
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
