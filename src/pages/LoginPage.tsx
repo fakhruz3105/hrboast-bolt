@@ -18,6 +18,8 @@ export default function LoginPage() {
 
   useEffect(() => {
     const fetchCompanyName = async () => {
+      if (!supabase) return;
+      
       try {
         // First try to find company by admin email
         const { data: companyData, error: companyError } = await supabase
@@ -25,13 +27,12 @@ export default function LoginPage() {
           .select('name')
           .limit(1)
           .single();
-  
-        if (!companyError && companyData) {
-          setCompanyName(companyData.name);
-          return;
+
+        if (companyError) {
+          throw companyError;
         }
-  
-        setCompanyName(null);
+
+        setCompanyName(companyData?.name);
       } catch (error) {
         console.error('Error fetching company:', error);
         setCompanyName(null);
@@ -39,7 +40,7 @@ export default function LoginPage() {
     };
 
     fetchCompanyName();
-  }, []);
+  }, [supabase]);
 
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
