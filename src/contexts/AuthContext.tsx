@@ -6,7 +6,6 @@ type User = {
   id: string;
   email: string;
   role: string;
-  company_id?: string;
 };
 
 type AuthContextType = {
@@ -149,7 +148,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .select(`
           id,
           email,
-          company_id,
           role:role_id(role),
           is_active
         `)
@@ -174,7 +172,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: staffData.id,
         email: staffData.email,
         role: staffData.role?.role || 'staff',
-        company_id: staffData.company_id
       };
 
       setUser(user);

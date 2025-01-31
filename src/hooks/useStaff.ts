@@ -57,18 +57,11 @@ export function useStaff() {
   }
 
   useEffect(() => {
-    if (user?.company_id) {
-      loadStaff();
-    } else {
-      setLoading(false);
-    }
-  }, [user?.company_id]);
+    loadStaff();
+  }, []);
 
   async function addStaff(staffMember: StaffFormData) {
     try {
-      const { data: userData } = await supabase.auth.getUser();
-      const user = userData.user;
-
       const { data: roleMap } = await supabase
         .from('role_mappings')
         .select('*')
@@ -84,7 +77,6 @@ export function useStaff() {
           phone_number: staffMember.phone_number,
           join_date: staffMember.join_date,
           status: staffMember.status,
-          company_id: user?.user_metadata?.company_id,
           is_active: true,
           role_id: roleMap?.id
         }])
