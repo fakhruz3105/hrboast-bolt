@@ -19,25 +19,25 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 // Demo users for development
-const DEMO_USERS = {
-  'admin@example.com': {
-    id: '2',
-    email: 'admin@example.com',
-    role: 'admin',
-    company_id: '11111111-1111-1111-1111-111111111111'
-  },
-  'staff@example.com': {
-    id: '3',
-    email: 'staff@example.com',
-    role: 'staff',
-    company_id: '11111111-1111-1111-1111-111111111111'
-  },
-  'super.admin@example.com': {
-    id: '1',
-    email: 'super.admin@example.com',
-    role: 'super_admin'
-  }
-};
+// const DEMO_USERS = {
+//   'admin@example.com': {
+//     id: '2',
+//     email: 'admin@example.com',
+//     role: 'admin',
+//     company_id: '11111111-1111-1111-1111-111111111111'
+//   },
+//   'staff@example.com': {
+//     id: '3',
+//     email: 'staff@example.com',
+//     role: 'staff',
+//     company_id: '11111111-1111-1111-1111-111111111111'
+//   },
+//   'super.admin@example.com': {
+//     id: '1',
+//     email: 'super.admin@example.com',
+//     role: 'super_admin'
+//   }
+// };
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = useSupabase();
@@ -62,90 +62,86 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string, rememberMe = false): Promise<{ user: User }> => {
     try {
-      // Check if password is kertas12
-      if (password !== 'kertas12') {
-        throw new Error('Invalid password');
-      }
-
       // For demo users
-      const demoUser = DEMO_USERS[email as keyof typeof DEMO_USERS];
-      if (demoUser) {
-        setUser(demoUser);
-        // Store user based on rememberMe preference
-        if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(demoUser));
-          sessionStorage.removeItem('user');
-        } else {
-          sessionStorage.setItem('user', JSON.stringify(demoUser));
-          localStorage.removeItem('user');
-        }
-        return { user: demoUser };
-      }
+      // const demoUser = DEMO_USERS[email as keyof typeof DEMO_USERS];
+
+      // if (demoUser) {
+      //   setUser(demoUser);
+      //   // Store user based on rememberMe preference
+      //   if (rememberMe) {
+      //     localStorage.setItem('user', JSON.stringify(demoUser));
+      //     sessionStorage.removeItem('user');
+      //   } else {
+      //     sessionStorage.setItem('user', JSON.stringify(demoUser));
+      //     localStorage.removeItem('user');
+      //   }
+      //   return { user: demoUser };
+      // }
 
       // For super admin
-      if (email === 'super.admin@example.com') {
-        const { data: staffData, error: staffError } = await supabase
-          .from('staff')
-          .select(`
-            id,
-            email,
-            role:role_id(
-              id,
-              role
-            )
-          `)
-          .eq('email', email)
-          .single();
+      // if (email === 'super.admin@example.com') {
+      //   const { data: staffData, error: staffError } = await supabase
+      //     .from('staff')
+      //     .select(`
+      //       id,
+      //       email,
+      //       role:role_id(
+      //         id,
+      //         role
+      //       )
+      //     `)
+      //     .eq('email', email)
+      //     .single();
 
-        if (staffError) throw staffError;
-        if (!staffData) throw new Error('Super admin not found');
+      //   if (staffError) throw staffError;
+      //   if (!staffData) throw new Error('Super admin not found');
 
-        const user = {
-          id: staffData.id,
-          email: staffData.email,
-          role: 'super_admin' // Force role to super_admin
-        };
+      //   const user = {
+      //     id: staffData.id,
+      //     email: staffData.email,
+      //     role: 'super_admin' // Force role to super_admin
+      //   };
 
-        setUser(user);
-        if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(user));
-          sessionStorage.removeItem('user');
-        } else {
-          sessionStorage.setItem('user', JSON.stringify(user));
-          localStorage.removeItem('user');
-        }
-        return { user };
-      }
+      //   setUser(user);
+      //   if (rememberMe) {
+      //     localStorage.setItem('user', JSON.stringify(user));
+      //     sessionStorage.removeItem('user');
+      //   } else {
+      //     sessionStorage.setItem('user', JSON.stringify(user));
+      //     localStorage.removeItem('user');
+      //   }
+      //   return { user };
+      // }
 
       // For company admin
-      const { data: companyData, error: companyError } = await supabase
-        .from('companies')
-        .select('id, name, email, is_active')
-        .eq('email', email)
-        .maybeSingle();
+      // const { data: companyData, error: companyError } = await supabase
+      //   .from('companies')
+      //   .select('id, name, email, is_active')
+      //   .eq('email', email)
+      //   .maybeSingle();
 
-      if (!companyError && companyData) {
-        if (!companyData.is_active) {
-          throw new Error('Company account is inactive');
-        }
+      // if (!companyError && companyData) {
+      //   if (!companyData.is_active) {
+      //     throw new Error('Company account is inactive');
+      //   }
 
-        const user = {
-          id: companyData.id,
-          email: companyData.email,
-          role: 'admin',
-          company_id: companyData.id
-        };
+      //   const user = {
+      //     id: companyData.id,
+      //     email: companyData.email,
+      //     role: 'admin',
+      //     company_id: companyData.id
+      //   };
 
-        setUser(user);
-        if (rememberMe) {
-          localStorage.setItem('user', JSON.stringify(user));
-          sessionStorage.removeItem('user');
-        } else {
-          sessionStorage.setItem('user', JSON.stringify(user));
-          localStorage.removeItem('user');
-        }
-        return { user };
-      }
+      //   setUser(user);
+      //   if (rememberMe) {
+      //     localStorage.setItem('user', JSON.stringify(user));
+      //     sessionStorage.removeItem('user');
+      //   } else {
+      //     sessionStorage.setItem('user', JSON.stringify(user));
+      //     localStorage.removeItem('user');
+      //   }
+      //   return { user };
+      // }
 
       // For staff
       const { data: staffData, error: staffError } = await supabase
@@ -158,6 +154,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           is_active
         `)
         .eq('email', email)
+        .eq('password', password)
         .maybeSingle();
 
       if (staffError) {
