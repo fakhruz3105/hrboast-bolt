@@ -2,13 +2,13 @@ import { jsPDF } from 'jspdf';
 import { PDF_CONSTANTS, PDFHelpers } from './pdfUtils';
 import { EmployeeFormResponse } from '../types/employeeForm';
 
-export function generateEmployeeFormPDF(response: EmployeeFormResponse) {
+export function generateEmployeeFormPDF(companyName: string, response: EmployeeFormResponse) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Reference Number and Date
     y = PDFHelpers.addReferenceNumber(doc, 'MTB/EMP', y);

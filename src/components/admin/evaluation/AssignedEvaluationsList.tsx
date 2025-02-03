@@ -6,12 +6,13 @@ import { generateEvaluationReportPDF } from '../../../utils/evaluationReportPDF'
 import { toast } from 'react-hot-toast';
 
 type Props = {
+  company: string;
   assignments: EvaluationResponse[];
   onView: (evaluation: EvaluationResponse) => void;
   onDelete?: (evaluation: EvaluationResponse) => void;
 };
 
-export default function AssignedEvaluationsList({ assignments, onView, onDelete }: Props) {
+export default function AssignedEvaluationsList({ company, assignments, onView, onDelete }: Props) {
   const handleDelete = (assignment: EvaluationResponse) => {
     if (window.confirm('Are you sure you want to delete this evaluation assignment?')) {
       onDelete?.(assignment);
@@ -24,7 +25,7 @@ export default function AssignedEvaluationsList({ assignments, onView, onDelete 
         toast.error('Only completed evaluations can be downloaded');
         return;
       }
-      generateEvaluationReportPDF(evaluation);
+      generateEvaluationReportPDF(company, evaluation);
       toast.success('Evaluation report downloaded successfully');
     } catch (error) {
       console.error('Error downloading evaluation report:', error);

@@ -2,13 +2,13 @@ import { jsPDF } from 'jspdf';
 import { PDF_CONSTANTS, PDFHelpers } from './pdfUtils';
 import { EvaluationResponse } from '../types/evaluation';
 
-export function generateEvaluationReportPDF(evaluation: EvaluationResponse) {
+export function generateEvaluationReportPDF(companyName: string, evaluation: EvaluationResponse) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Add title and reference in a compact format
     const headerTable = [

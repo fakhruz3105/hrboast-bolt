@@ -18,13 +18,13 @@ type ExitInterview = {
   };
 };
 
-export function generateExitInterviewPDF(interview: ExitInterview) {
+export function generateExitInterviewPDF(companyName: string, interview: ExitInterview) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Reference Number and Date
     y = PDFHelpers.addReferenceNumber(doc, 'MTB/EXIT', y);

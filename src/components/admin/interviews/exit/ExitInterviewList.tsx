@@ -8,7 +8,7 @@ import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 export default function ExitInterviewList() {
   const supabase = useSupabase();
-  const { user } = useAuth();
+  const { user, company } = useAuth();
   const [interviews, setInterviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedInterview, setSelectedInterview] = useState<any>(null);
@@ -75,7 +75,7 @@ export default function ExitInterviewList() {
 
   const handleDownload = async (interview: any) => {
     try {
-      generateExitInterviewPDF(interview);
+      generateExitInterviewPDF(company, interview);
       toast.success('Exit interview downloaded successfully');
     } catch (error) {
       console.error('Error downloading exit interview:', error);

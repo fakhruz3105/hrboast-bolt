@@ -4,6 +4,7 @@ import { generateWarningLetterPDF } from '../../../../utils/warningLetterPDF';
 import { toast } from 'react-hot-toast';
 
 type Props = {
+  company: string;
   letters: any[];
   onView: (letter: any) => void;
   onEdit: (letter: any) => void;
@@ -11,7 +12,7 @@ type Props = {
   onDownload: (letter: any) => void;
 };
 
-export default function WarningLetterList({ letters, onView, onEdit, onDelete, onDownload }: Props) {
+export default function WarningLetterList({ company, letters, onView, onEdit, onDelete, onDownload }: Props) {
   const getPrimaryDepartment = (staff: any) => {
     if (!staff?.departments) return 'N/A';
     const primaryDept = staff.departments.find((d: any) => d.is_primary);
@@ -47,7 +48,7 @@ export default function WarningLetterList({ letters, onView, onEdit, onDelete, o
         issued_date: letter.issued_date
       };
 
-      generateWarningLetterPDF(transformedLetter);
+      generateWarningLetterPDF(company, transformedLetter);
       toast.success('Warning letter downloaded successfully');
     } catch (error) {
       console.error('Error downloading warning letter:', error);

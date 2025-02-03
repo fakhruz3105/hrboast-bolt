@@ -5,14 +5,15 @@ import { generateEmployeeFormPDF } from '../../../../utils/employeeFormPDF';
 import { toast } from 'react-hot-toast';
 
 type Props = {
+  company: string;
   response: EmployeeFormResponse;
   onClose: () => void;
 };
 
-export default function ResponseViewer({ response, onClose }: Props) {
+export default function ResponseViewer({ company, response, onClose }: Props) {
   const handleDownload = () => {
     try {
-      generateEmployeeFormPDF(response);
+      generateEmployeeFormPDF(company, response);
       toast.success('Employee form downloaded successfully');
     } catch (error) {
       console.error('Error downloading form:', error);

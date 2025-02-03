@@ -7,13 +7,13 @@ type MemoWithDetails = Memo & {
   staff_name?: string;
 };
 
-export function generateMemoPDF(memo: MemoWithDetails) {
+export function generateMemoPDF(companyName: string, memo: MemoWithDetails) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Reference Number and Date
     y = PDFHelpers.addReferenceNumber(doc, 'MTB/MEMO', y);

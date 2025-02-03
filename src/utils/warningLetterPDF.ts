@@ -21,13 +21,13 @@ type WarningLetter = {
   issued_date: string;
 };
 
-export function generateWarningLetterPDF(letter: WarningLetter) {
+export function generateWarningLetterPDF(companyName: string, letter: WarningLetter) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Reference Number and Date
     y = PDFHelpers.addReferenceNumber(doc, 'MTB/WL', y);

@@ -7,9 +7,11 @@ import AssignedEvaluationsList from '../../../../components/admin/evaluation/Ass
 import EvaluationResponseDetails from '../../../../components/admin/evaluation/details/EvaluationResponseDetails';
 import EvaluationStats from '../../../../components/admin/evaluation/EvaluationStats';
 import { useSupabase } from '../../../../providers/SupabaseProvider';
+import { useAuth } from '../../../../contexts/AuthContext';
 
 export default function QuarterEvaluationPage() {
   const supabase = useSupabase();
+  const { company } = useAuth();
   const [evaluations, setEvaluations] = useState<EvaluationForm[]>([]);
   const [assignments, setAssignments] = useState<EvaluationResponse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -168,6 +170,7 @@ export default function QuarterEvaluationPage() {
           <h2 className="text-lg font-medium text-gray-900 mb-4">Assigned Evaluations</h2>
           <div className="bg-white rounded-lg shadow">
             <AssignedEvaluationsList
+              company={company}
               assignments={assignments}
               onView={setViewingResponse}
               onDelete={handleDeleteAssignment}

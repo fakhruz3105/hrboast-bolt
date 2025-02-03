@@ -11,7 +11,7 @@ import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function EmployeeFormPage() {
   const supabase = useSupabase();
-  const { user } = useAuth();
+  const { user, company } = useAuth();
   const { levels } = useStaffLevels();
   const { departments } = useDepartments();
   const [showForm, setShowForm] = useState(false);
@@ -334,6 +334,7 @@ export default function EmployeeFormPage() {
 
       {selectedResponse && (
         <ResponseViewer
+          company={company}
           response={selectedResponse}
           onClose={() => setSelectedResponse(null)}
         />

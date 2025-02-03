@@ -7,9 +7,11 @@ import WarningLetterViewer from '../../../components/admin/misconduct/warning/Wa
 import { WarningLetterFormData } from '../../../types/warningLetter';
 import { toast } from 'react-hot-toast';
 import { useSupabase } from '../../../providers/SupabaseProvider';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function WarningLetterPage() {
   const supabase = useSupabase();
+  const { company } = useAuth();
   const { staff, loading: staffLoading } = useStaff();
   const [letters, setLetters] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -152,6 +154,7 @@ export default function WarningLetterPage() {
 
       <div className="bg-white rounded-lg shadow">
         <WarningLetterList
+          company={company}
           letters={letters}
           onView={setViewingLetter}
           onEdit={handleEdit}

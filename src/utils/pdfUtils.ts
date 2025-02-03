@@ -34,9 +34,8 @@ export const PDFHelpers = {
     return doc;
   },
 
-  addCompanyHeader(doc: jsPDF, y: number) {
+  addCompanyHeader(companyName: string, doc: jsPDF, y: number) {
     const pageWidth = doc.internal.pageSize.width;
-    const companyName = 'MUSLIMTRAVELBUG SDN BHD';
 
     // Add company name
     doc.setFontSize(PDF_CONSTANTS.FONT_SIZES.TITLE);

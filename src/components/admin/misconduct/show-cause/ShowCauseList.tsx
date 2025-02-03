@@ -5,6 +5,7 @@ import { generateShowCauseLetterPDF } from '../../../../utils/showCauseLetterPDF
 import { toast } from 'react-hot-toast';
 
 type Props = {
+  company: string;
   letters: ShowCauseLetter[];
   onView: (letter: ShowCauseLetter) => void;
   onDelete: (id: string) => void;
@@ -19,7 +20,7 @@ const TYPE_LABELS: Record<string, string> = {
   misconduct: 'Other Misconduct'
 };
 
-export default function ShowCauseList({ letters, onView, onDelete }: Props) {
+export default function ShowCauseList({ company, letters, onView, onDelete }: Props) {
   const handleDelete = async (letter: ShowCauseLetter) => {
     if (window.confirm(`Are you sure you want to delete this show cause letter for ${letter.staff?.name}?`)) {
       await onDelete(letter.id);
@@ -28,7 +29,7 @@ export default function ShowCauseList({ letters, onView, onDelete }: Props) {
 
   const handleDownload = async (letter: ShowCauseLetter) => {
     try {
-      generateShowCauseLetterPDF(letter);
+      generateShowCauseLetterPDF(company, letter);
       toast.success('Show cause letter downloaded successfully');
     } catch (error) {
       console.error('Error downloading show cause letter:', error);

@@ -10,7 +10,7 @@ import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function MemoPage() {
   const supabase = useSupabase();
-  const { user } = useAuth();
+  const { user, company } = useAuth();
   const { departments } = useDepartments();
   const { staff } = useStaff();
   const [memos, setMemos] = useState<any[]>([]);
@@ -142,7 +142,7 @@ export default function MemoPage() {
 
   const handleDownload = async (memo: any) => {
     try {
-      generateMemoPDF(memo);
+      generateMemoPDF(company, memo);
       toast.success('Memo downloaded successfully');
     } catch (error) {
       console.error('Error downloading memo:', error);

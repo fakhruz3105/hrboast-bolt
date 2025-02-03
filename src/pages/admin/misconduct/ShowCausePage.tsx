@@ -8,9 +8,11 @@ import { ShowCauseFormData } from '../../../types/showCause';
 import { Letter } from '../../../types/letter';
 import { toast } from 'react-hot-toast';
 import { useSupabase } from '../../../providers/SupabaseProvider';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function ShowCausePage() {
   const supabase = useSupabase();
+  const { company } = useAuth();
   const { staff, loading: staffLoading } = useStaff();
   const [letters, setLetters] = useState<Letter[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -133,6 +135,7 @@ export default function ShowCausePage() {
 
       <div className="bg-white rounded-lg shadow">
         <ShowCauseList
+          company={company}
           letters={letters}
           onView={setViewingLetter}
           onDelete={handleDelete}

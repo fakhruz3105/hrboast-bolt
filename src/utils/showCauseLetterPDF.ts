@@ -22,13 +22,13 @@ type ShowCauseLetter = {
   issued_date: string;
 };
 
-export function generateShowCauseLetterPDF(letter: ShowCauseLetter) {
+export function generateShowCauseLetterPDF(companyName: string, letter: ShowCauseLetter) {
   const doc = PDFHelpers.createDocument();
   let y = PDF_CONSTANTS.MARGIN;
 
   try {
     // Add header
-    y = PDFHelpers.addCompanyHeader(doc, y);
+    y = PDFHelpers.addCompanyHeader(companyName, doc, y);
 
     // Reference Number and Date
     y = PDFHelpers.addReferenceNumber(doc, 'MTB/SC', y);

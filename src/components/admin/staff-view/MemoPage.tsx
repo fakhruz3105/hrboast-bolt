@@ -5,9 +5,11 @@ import { toast } from 'react-hot-toast';
 import { Memo } from '../../../types/memo';
 import { generateMemoPDF } from '../../../utils/memoPDF';
 import { useSupabase } from '../../../providers/SupabaseProvider';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function MemoPage() {
   const supabase = useSupabase();
+  const { company } = useAuth();
   const { staff } = useStaffProfile();
   const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,7 @@ export default function MemoPage() {
 
   const handleDownload = async (memo: Memo) => {
     try {
-      generateMemoPDF(memo);
+      generateMemoPDF(company, memo);
       toast.success('Memo downloaded successfully');
     } catch (error) {
       console.error('Error downloading memo:', error);
