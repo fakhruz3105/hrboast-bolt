@@ -3,44 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Building2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
-import { useSupabase } from '../providers/SupabaseProvider';
 
 export default function LoginPage() {
-  const supabase = useSupabase();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [companyName, setCompanyName] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
-
-  useEffect(() => {
-    const fetchCompanyName = async () => {
-      if (!supabase) return;
-      
-      try {
-        // First try to find company by admin email
-        const { data: companyData, error: companyError } = await supabase
-          .from('companies')
-          .select('name')
-          .limit(1)
-          .single();
-
-        if (companyError) {
-          throw companyError;
-        }
-
-        setCompanyName(companyData?.name);
-      } catch (error) {
-        console.error('Error fetching company:', error);
-        setCompanyName(null);
-      }
-    };
-
-    fetchCompanyName();
-  }, [supabase]);
+  const { login, company: companyName } = useAuth();
 
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;

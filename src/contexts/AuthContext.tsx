@@ -4,6 +4,7 @@ import { useSupabase } from '../providers/SupabaseProvider';
 
 type User = {
   id: string;
+  name: string;
   email: string;
   role: string;
 };
@@ -13,6 +14,7 @@ type AuthContextType = {
   loading: boolean;
   login: (email: string, password: string, rememberMe?: boolean) => Promise<{ user: User }>;
   logout: () => Promise<void>;
+  company: string;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -41,6 +43,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = useSupabase();
   const [user, setUser] = useState<User | null>(null);
+  const [company, setCompany] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +61,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setLoading(false);
   }, []);
+
+  useEffect(() => {
+    const fetchCompanyName = async () => {
+      if (!supabase) return;
+      
+      try {
+        // First try to find company by admin email
+        const { data: companyData, error: companyError } = await supabase
+          .from('companies')
+          .select('name')
+          .limit(1)
+          .single();
+
+        if (companyError) {
+          throw companyError;
+        }
+
+        setCompany(companyData?.name);
+      } catch (error) {
+        console.error('Error fetching company:', error);
+        setCompany('');
+      }
+    };
+
+    fetchCompanyName();
+  }, [supabase]);
 
   const login = async (email: string, password: string, rememberMe = false): Promise<{ user: User }> => {
     try {
@@ -147,6 +176,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .from('staff')
         .select(`
           id,
+          name,
           email,
           role:role_id(role),
           is_active
@@ -170,6 +200,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const user = {
         id: staffData.id,
+        name: staffData.name,
         email: staffData.email,
         role: staffData.role?.role || 'staff',
       };
@@ -203,7 +234,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, company }}>
       {children}
     </AuthContext.Provider>
   );
