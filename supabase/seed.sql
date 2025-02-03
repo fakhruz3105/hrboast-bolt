@@ -73,7 +73,6 @@ INSERT INTO "public"."role_mappings" ("id", "staff_level_id", "role", "created_a
 --
 
 INSERT INTO "public"."staff" ("id", "name", "phone_number", "email", "join_date", "status", "created_at", "updated_at", "role_id", "is_active", "company_id", "password") VALUES
-	('26f14468-5a05-4349-991d-a2529ee017ed', 'System Admin', '+60123456789', 'admin@example.com', '2025-02-03', 'permanent', '2025-02-03 02:48:54.343264+00', '2025-02-03 03:59:52.823632+00', '735e449f-f7d2-42bc-b776-8cb8f57c3bf0', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
 	('b27ebf3f-32b4-44a9-8b80-3078c28f5f4a', 'LIYANA SYAZANA BINTI KAMARUDIN', '+60123456799', 'liyana@muslimtravelbug.com', '2024-01-30', 'permanent', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
 	('7104e3de-3569-4ecf-b293-1a3b58ccf430', 'HANIS MUNIRAH BINTI ZAKARIA@HASBULLAH', '+60123456790', 'hanis@muslimtravelbug.com', '2024-11-04', 'probation', '2025-02-03 02:48:54.986177+00', '2025-02-03 02:48:54.986177+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
 	('a422cfeb-2c59-4d61-a556-80864c2c1ac5', 'NADIA NAJWA BINTI HUSSIN', '+60123456791', 'nadia@muslimtravelbug.com', '2024-04-22', 'permanent', '2025-02-03 02:48:54.986177+00', '2025-02-03 02:48:54.986177+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
@@ -96,7 +95,8 @@ INSERT INTO "public"."staff" ("id", "name", "phone_number", "email", "join_date"
 	('92ab14a1-15ee-439c-b991-6ac990a97eb1', 'NURUL HIDAYAH BINTI ABD HAMID', '+60123456808', 'hidayah@muslimtravelbug.com', '2024-11-18', 'probation', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', '514be92e-59d2-4d1d-8441-d8852ba47818', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
 	('59d76036-b107-4608-a7e5-22ab57c6fae3', 'ALIF ASYRAAF BIN MOHD FADHIL SAMUEL', '+60123456809', 'alif@muslimtravelbug.com', '2023-08-15', 'permanent', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
 	('cfd94f9b-5a11-4b01-b236-72080870e2ad', 'DZULAIFATUN NUHA BINTI ZOLKIFLI', '+60123456810', 'nuha@muslimtravelbug.com', '2023-03-24', 'permanent', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
-	('aec8cca1-13aa-4a42-980a-eec2081ffe2b', 'NUR ZUHRIYANA BTE JAMALUDIN', '+60123456811', 'zuhriyana@muslimtravelbug.com', '2024-04-16', 'permanent', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12');
+	('aec8cca1-13aa-4a42-980a-eec2081ffe2b', 'NUR ZUHRIYANA BTE JAMALUDIN', '+60123456811', 'zuhriyana@muslimtravelbug.com', '2024-04-16', 'permanent', '2025-02-03 02:48:54.999231+00', '2025-02-03 02:48:54.999231+00', 'bc10b253-3d14-4759-86e7-7a887ca38fa6', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12'),
+	('26f14468-5a05-4349-991d-a2529ee017ed', 'HR Admin', '+60123456789', 'hr@muslimtravelbug.com', '2025-02-03', 'permanent', '2025-02-03 02:48:54.343264+00', '2025-02-03 04:05:42.44554+00', '735e449f-f7d2-42bc-b776-8cb8f57c3bf0', true, '08adba96-a442-4873-aa4c-d858c0d34758', 'kertas12');
 
 
 --
