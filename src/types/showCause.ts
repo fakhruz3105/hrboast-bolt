@@ -13,16 +13,27 @@ export type ShowCauseLetter = {
   title: string;
   incident_date: string;
   description: string;
-  issued_date: string;
   response?: string;
   response_date?: string;
   status: 'pending' | 'responded';
-  staff?: {
+  staff: {
     name: string;
-    department?: {
-      name: string;
-    };
+    departments?: Array<{
+      is_primary: boolean;
+      department: {
+        name: string;
+      };
+    }>;
   };
+  content: {
+    type: string;
+    title?: string;
+    incident_date: string;
+    description: string;
+    response?: string;
+    response_date?: string;
+  };
+  issued_date: string;
 };
 
 export type ShowCauseFormData = Omit<ShowCauseLetter, 'id' | 'issued_date' | 'status' | 'staff'>;

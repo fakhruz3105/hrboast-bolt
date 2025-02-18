@@ -22,7 +22,8 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
     level_ids: [],
     primary_level_id: '',
     join_date: new Date().toISOString().split('T')[0],
-    status: 'probation'
+    status: 'probation',
+    role_id: ''
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -30,25 +31,43 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
   // Initialize form data when editing
   useEffect(() => {
     if (initialData) {
-      // Transform departments data
-      const departmentIds = initialData.departments?.map((d: any) => d.department_id) || [];
-      const primaryDepartment = initialData.departments?.find((d: any) => d.is_primary);
+      try {
+        // Safely get department IDs and primary department
+        const departmentIds = initialData.departments?.reduce((ids: string[], dept: any) => {
+          if (dept?.department?.id) {
+            ids.push(dept.department.id);
+          }
+          return ids;
+        }, []) || [];
 
-      // Transform levels data
-      const levelIds = initialData.levels?.map((l: any) => l.level_id) || [];
-      const primaryLevel = initialData.levels?.find((l: any) => l.is_primary);
+        const primaryDepartment = initialData.departments?.find((d: any) => d?.is_primary && d?.department?.id);
 
-      setFormData({
-        name: initialData.name || '',
-        phone_number: initialData.phone_number || '',
-        email: initialData.email || '',
-        department_ids: departmentIds,
-        primary_department_id: primaryDepartment?.department_id || '',
-        level_ids: levelIds,
-        primary_level_id: primaryLevel?.level_id || '',
-        join_date: initialData.join_date || new Date().toISOString().split('T')[0],
-        status: initialData.status || 'probation'
-      });
+        // Safely get level IDs and primary level
+        const levelIds = initialData.levels?.reduce((ids: string[], level: any) => {
+          if (level?.level?.id) {
+            ids.push(level.level.id);
+          }
+          return ids;
+        }, []) || [];
+
+        const primaryLevel = initialData.levels?.find((l: any) => l?.is_primary && l?.level?.id);
+
+        setFormData({
+          name: initialData.name || '',
+          phone_number: initialData.phone_number || '',
+          email: initialData.email || '',
+          department_ids: departmentIds,
+          primary_department_id: primaryDepartment?.department?.id || '',
+          level_ids: levelIds,
+          primary_level_id: primaryLevel?.level?.id || '',
+          join_date: initialData.join_date || new Date().toISOString().split('T')[0],
+          status: initialData.status || 'probation',
+          role_id: initialData.role_id || ''
+        });
+      } catch (error) {
+        console.error('Error initializing form data:', error);
+        toast.error('Error loading staff data');
+      }
     }
   }, [initialData]);
 
@@ -130,10 +149,15 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
       ? ''
       : formData.primary_level_id;
 
+    // Get role ID from the primary level
+    const level = levels.find(l => l.id === (newLevelIds.includes(levelId) ? levelId : newLevelIds[0]));
+    const roleId = level?.role_id || '';
+
     setFormData({
       ...formData,
       level_ids: newLevelIds,
-      primary_level_id: newPrimaryLevelId
+      primary_level_id: newPrimaryLevelId,
+      role_id: roleId
     });
   };
 

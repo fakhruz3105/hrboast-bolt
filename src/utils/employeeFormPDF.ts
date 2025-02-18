@@ -16,7 +16,6 @@ export function generateEmployeeFormPDF(companyName: string, response: EmployeeF
     y += PDF_CONSTANTS.LINE_HEIGHT;
 
     // Form Title
-    y = PDFHelpers.addCenteredText(doc, 'EMPLOYEE INFORMATION FORM', y, PDF_CONSTANTS.FONT_SIZES.SUBTITLE, true);
     y += PDF_CONSTANTS.LINE_HEIGHT * 2;
 
     // Personal Information

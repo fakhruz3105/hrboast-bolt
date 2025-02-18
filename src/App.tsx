@@ -20,6 +20,7 @@ import AllStaffPage from './pages/admin/staff/AllStaffPage';
 import ProbationStaffPage from './pages/admin/staff/ProbationStaffPage';
 import DepartmentsPage from './pages/admin/staff/DepartmentsPage';
 import LevelsPage from './pages/admin/staff/LevelsPage';
+import PositionsPage from './pages/admin/staff/PositionsPage';
 import CompanyEventsPage from './pages/admin/events/CompanyEventsPage';
 import StaffInterviewPage from './pages/admin/interview/StaffInterviewPage';
 import ExitInterviewPage from './pages/admin/interview/ExitInterviewPage';
@@ -101,6 +102,7 @@ export default function App() {
               <Route path="probation" element={<ProbationStaffPage />} />
               <Route path="departments" element={<DepartmentsPage />} />
               <Route path="levels" element={<LevelsPage />} />
+              <Route path="positions" element={<PositionsPage />} />
             </Route>
             <Route path="events" element={<CompanyEventsPage />} />
             <Route path="evaluation">

@@ -26,21 +26,35 @@ export default function ExitInterviewList() {
         return;
       }
 
+      // First get the company ID for the current user
       const { data: staffData, error: staffError } = await supabase
         .from('staff')
-        .select('id, company_id')
+        .select('company_id')
         .eq('email', user.email)
         .single();
 
       if (staffError) throw staffError;
-      if (!staffData) {
-        toast.error('Staff record not found');
+      if (!staffData?.company_id) {
+        toast.error('Company not found. Please contact administrator.');
         return;
       }
 
-      const { data, error } = await supabase.rpc('get_company_exit_interviews', {
-        p_company_id: staffData.company_id
-      });
+      // Query HR letters for exit interviews
+      const { data, error } = await supabase
+        .from('hr_letters')
+        .select(`
+          *,
+          staff:staff_id (
+            name,
+            departments:staff_departments(
+              is_primary,
+              department:departments(name)
+            )
+          )
+        `)
+        .eq('type', 'interview')
+        .eq('content->>type', 'exit')
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       setInterviews(data || []);
@@ -108,10 +122,10 @@ export default function ExitInterviewList() {
           {interviews.map((interview) => (
             <tr key={interview.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm font-medium text-gray-900">{interview.staff_name}</div>
+                <div className="text-sm font-medium text-gray-900">{interview.staff?.name}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {interview.department_name}
+                {interview.staff?.departments?.find((d: any) => d.is_primary)?.department?.name}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800">

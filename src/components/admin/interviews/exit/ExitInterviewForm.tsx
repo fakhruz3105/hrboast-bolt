@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { ExitInterviewFormData } from '../../../../types/exitInterview';
+import { useSupabase } from '../../../../providers/SupabaseProvider';
 
 type Props = {
-  onSubmit: (data: ExitInterviewFormData) => Promise<void>;
+  letterId: string;
+  staffId: string;
+  onSubmit: () => void;
   onCancel: () => void;
 };
 
-export default function ExitInterviewForm({ onSubmit, onCancel }: Props) {
-  const [formData, setFormData] = useState<ExitInterviewFormData>({
-    staff_id: '',
+export default function ExitInterviewForm({ letterId, staffId, onSubmit, onCancel }: Props) {
+  const supabase = useSupabase();
+  const [formData, setFormData] = useState({
     reason: '',
     detailedReason: '',
     lastWorkingDate: '',
@@ -21,10 +23,43 @@ export default function ExitInterviewForm({ onSubmit, onCancel }: Props) {
       clearedDues: false
     }
   });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    setLoading(true);
+    
+    try {
+      // Update HR letter with exit interview response
+      const { error: letterError } = await supabase
+        .from('hr_letters')
+        .update({
+          content: {
+            type: 'exit',
+            ...formData,
+            status: 'completed'
+          },
+          status: 'submitted'
+        })
+        .eq('id', letterId);
+
+      if (letterError) throw letterError;
+
+      // Update staff status to resigned
+      const { error: staffError } = await supabase
+        .from('staff')
+        .update({ status: 'resigned' })
+        .eq('id', staffId);
+
+      if (staffError) throw staffError;
+
+      onSubmit();
+    } catch (error) {
+      console.error('Error submitting exit interview:', error);
+      alert('Failed to submit exit interview');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -123,15 +158,17 @@ export default function ExitInterviewForm({ onSubmit, onCancel }: Props) {
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+          disabled={loading}
+          className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-md"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+          disabled={loading}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
         >
-          Submit Exit Interview
+          {loading ? 'Submitting...' : 'Submit Exit Interview'}
         </button>
       </div>
     </form>

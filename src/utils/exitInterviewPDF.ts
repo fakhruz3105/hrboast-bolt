@@ -32,12 +32,12 @@ export function generateExitInterviewPDF(companyName: string, interview: ExitInt
     y += PDF_CONSTANTS.LINE_HEIGHT;
 
     // Form Title
-    y = PDFHelpers.addCenteredText(doc, 'EXIT INTERVIEW FORM', y, PDF_CONSTANTS.FONT_SIZES.SUBTITLE, true);
-    y += PDF_CONSTANTS.LINE_HEIGHT * 2;
+    y = PDFHelpers.addTitle(doc, 'EXIT INTERVIEW FORM', y);
 
     // Staff Details
-    y = PDFHelpers.addWrappedText(doc, `Name: ${interview.staff.name}`, y);
-    y = PDFHelpers.addWrappedText(doc, `Department: ${interview.staff.department?.name || 'N/A'}`, y);
+    y = PDFHelpers.addWrappedText(doc, 'Name: ' + interview.staff.name, y, true);
+    y += PDF_CONSTANTS.LINE_HEIGHT;
+    y = PDFHelpers.addWrappedText(doc, 'Department: ' + (interview.staff.department?.name || 'N/A'), y, true);
     y += PDF_CONSTANTS.LINE_HEIGHT * 2;
 
     // Exit Details
@@ -77,6 +77,7 @@ export function generateExitInterviewPDF(companyName: string, interview: ExitInt
       Object.entries(interview.content.exitChecklist).forEach(([key, value]) => {
         const label = key.split(/(?=[A-Z])/).join(' ').replace(/^\w/, c => c.toUpperCase());
         y = PDFHelpers.addWrappedText(doc, `☐ ${label}: ${value ? 'Completed' : 'Pending'}`, y);
+        y += PDF_CONSTANTS.LINE_HEIGHT;
       });
       y += PDF_CONSTANTS.LINE_HEIGHT;
     }

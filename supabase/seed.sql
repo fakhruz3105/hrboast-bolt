@@ -368,5 +368,32 @@ INSERT INTO "public"."staff_levels_junction" ("id", "staff_id", "level_id", "is_
 --
 -- PostgreSQL database dump complete
 --
+INSERT INTO "public"."positions" ("title", "description", "department_id", "requirements") VALUES
+	(
+		'Senior Tour Guide',
+		'Lead tour groups and provide exceptional travel experiences',
+		'4904c08c-8372-4372-b273-482aa76e55f2',
+		'[
+			"Minimum 3 years experience as a tour guide",
+			"Excellent communication and interpersonal skills",
+			"Fluent in English and Bahasa Malaysia",
+			"Knowledge of Islamic history and culture",
+			"First aid certification",
+			"Valid tour guide license"
+		]'::jsonb
+	),
+	(
+		'Tour Sales Executive',
+		'Sell tour packages and handle customer inquiries',
+		'3464d856-44ae-44ac-a9ca-1d44bbfad589',
+		'[
+			"Minimum 2 years experience in travel sales",
+			"Strong sales and negotiation skills",
+			"Excellent customer service skills",
+			"Knowledge of travel industry trends",
+			"Proficient in MS Office and travel booking systems",
+			"Target-driven mindset"
+		]'::jsonb
+	);
 
 RESET ALL;

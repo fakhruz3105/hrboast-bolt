@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useStaff } from '../../../hooks/useStaff';
 import StaffSelector from '../../../components/admin/staff/StaffSelector';
 import ExitInterviewList from '../../../components/admin/interviews/exit/ExitInterviewList';
-import { useAuth } from '../../../contexts/AuthContext';
 import { toast } from 'react-hot-toast';
 import { useSupabase } from '../../../providers/SupabaseProvider';
 
 export default function ExitInterviewPage() {
   const supabase = useSupabase();
-  const { user } = useAuth();
   const { staff, loading: staffLoading } = useStaff();
   const [showStaffSelector, setShowStaffSelector] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,19 +15,6 @@ export default function ExitInterviewPage() {
   const handleAssignInterview = async (staffId: string) => {
     try {
       setLoading(true);
-
-      // First get the company ID for the current user
-      const { data: staffData, error: staffError } = await supabase
-        .from('staff')
-        .select('company_id')
-        .eq('email', user!.email)
-        .single();
-
-      if (staffError) throw staffError;
-      if (!staffData?.company_id) {
-        toast.error('Company not found. Please contact administrator.');
-        return;
-      }
 
       // Create HR letter for exit interview
       const { error: letterError } = await supabase

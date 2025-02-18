@@ -4,7 +4,7 @@ import {
   Menu, X, LayoutDashboard, Users, Building2, Layers, 
   FileSpreadsheet, ClipboardCheck, UserMinus, AlertTriangle, 
   Settings, Shield, FileText, Gift, LogOut, Mail, UserCircle,
-  Target, Calendar, Database, Key, Monitor, Clock
+  Target, Calendar, Database, Key, Monitor, Clock, Briefcase
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -111,7 +111,8 @@ const adminMenuItems: MenuItem[] = [
       { icon: Users, label: 'All Staff', path: '/admin/staff/all' },
       { icon: Clock, label: 'Probation Staff', path: '/admin/staff/probation' },
       { icon: Building2, label: 'Departments', path: '/admin/staff/departments' },
-      { icon: Layers, label: 'Staff Levels', path: '/admin/staff/levels' }
+      { icon: Layers, label: 'Staff Levels', path: '/admin/staff/levels' },
+      { icon: Briefcase, label: 'Staff Positions', path: '/admin/staff/positions' }
     ]
   },
   {

@@ -11,10 +11,8 @@ export default function EmployeeFormPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (formId && supabase) {
-      loadFormRequest();
-    }
-  }, [formId, supabase]);
+    loadFormRequest();
+  }, [formId]);
 
   const loadFormRequest = async () => {
     try {

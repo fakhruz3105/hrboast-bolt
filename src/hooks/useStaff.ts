@@ -11,17 +11,33 @@ export function useStaff() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  async function loadStaff() {
+  useEffect(() => {
+    if (user?.email) {
+      loadStaff();
+    }
+  }, [user?.email]);
+
+  const loadStaff = async () => {
     try {
-      setLoading(true);
-      // Build query
-      const { data } = await supabase
+      // First get the company ID for the current user
+      const { data: staffData, error: staffError } = await supabase
+        .from('staff')
+        .select('company_id')
+        .eq('email', user!.email)
+        .single();
+
+      if (staffError) throw staffError;
+      if (!staffData?.company_id) {
+        throw new Error('Company not found. Please contact administrator.');
+      }
+
+      // Then load staff for this company
+      const { data, error } = await supabase
         .from('staff')
         .select(`
           *,
           departments:staff_departments(
             id,
-            department_id,
             is_primary,
             department:departments(
               id,
@@ -30,7 +46,6 @@ export function useStaff() {
           ),
           levels:staff_levels_junction(
             id,
-            level_id,
             is_primary,
             level:staff_levels(
               id,
@@ -43,30 +58,35 @@ export function useStaff() {
             role
           )
         `)
+        .eq('company_id', staffData.company_id)
         .order('name');
 
-      setStaff(data as Staff[]);
+      if (error) throw error;
+      setStaff(data || []);
       setError(null);
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to load staff');
-      setError(error);
-      toast.error(error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load staff';
+      console.error('Error loading staff:', error);
+      setError(new Error(message));
+      toast.error(message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  useEffect(() => {
-    loadStaff();
-  }, []);
-
-  async function addStaff(staffMember: StaffFormData) {
+  const addStaff = async (staffMember: StaffFormData) => {
     try {
-      const { data: roleMap } = await supabase
-        .from('role_mappings')
-        .select('*')
-        .eq('staff_level_id', staffMember.primary_level_id)
+      // Get company ID for current user
+      const { data: userData, error: userError } = await supabase
+        .from('staff')
+        .select('company_id')
+        .eq('email', user!.email)
         .single();
+
+      if (userError) throw userError;
+      if (!userData?.company_id) {
+        throw new Error('Company not found. Please contact administrator.');
+      }
 
       // First create the staff record
       const { data: newStaff, error: staffError } = await supabase
@@ -77,13 +97,19 @@ export function useStaff() {
           phone_number: staffMember.phone_number,
           join_date: staffMember.join_date,
           status: staffMember.status,
+          company_id: userData.company_id,
           is_active: true,
-          role_id: roleMap?.id
+          role_id: staffMember.role_id
         }])
         .select()
         .single();
 
-      if (staffError) throw staffError;
+      if (staffError) {
+        if (staffError.code === '23505') { // Unique violation
+          throw new Error('A staff member with this email already exists.');
+        }
+        throw staffError;
+      }
 
       // Create department associations
       const departmentAssociations = staffMember.department_ids.map(deptId => ({
@@ -118,7 +144,6 @@ export function useStaff() {
           *,
           departments:staff_departments(
             id,
-            department_id,
             is_primary,
             department:departments(
               id,
@@ -127,7 +152,6 @@ export function useStaff() {
           ),
           levels:staff_levels_junction(
             id,
-            level_id,
             is_primary,
             level:staff_levels(
               id,
@@ -144,31 +168,41 @@ export function useStaff() {
         .single();
 
       if (fetchError) throw fetchError;
+
       setStaff(prev => [...prev, completeStaff]);
+      setError(null);
       toast.success('Staff member added successfully');
       return completeStaff;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to add staff');
-      toast.error(error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to add staff';
+      console.error('Error adding staff:', error);
+      setError(new Error(message));
+      toast.error(message);
       throw error;
     }
-  }
+  };
 
-  async function updateStaff(id: string, updates: Partial<StaffFormData>) {
+  const updateStaff = async (id: string, updates: Partial<StaffFormData>) => {
     try {
-        // First update the staff record
-        const { error: staffError } = await supabase
+      // First update the staff record
+      const { error: staffError } = await supabase
         .from('staff')
         .update({
           name: updates.name,
           email: updates.email,
           phone_number: updates.phone_number,
           join_date: updates.join_date,
-          status: updates.status
+          status: updates.status,
+          role_id: updates.role_id
         })
         .eq('id', id);
 
-      if (staffError) throw staffError;
+      if (staffError) {
+        if (staffError.code === '23505') { // Unique violation
+          throw new Error('A staff member with this email already exists.');
+        }
+        throw staffError;
+      }
 
       // Update department associations if provided
       if (updates.department_ids && updates.primary_department_id) {
@@ -225,7 +259,6 @@ export function useStaff() {
           *,
           departments:staff_departments(
             id,
-            department_id,
             is_primary,
             department:departments(
               id,
@@ -234,7 +267,6 @@ export function useStaff() {
           ),
           levels:staff_levels_junction(
             id,
-            level_id,
             is_primary,
             level:staff_levels(
               id,
@@ -251,17 +283,21 @@ export function useStaff() {
         .single();
 
       if (fetchError) throw fetchError;
+
       setStaff(prev => prev.map(s => s.id === id ? updatedStaff : s));
+      setError(null);
       toast.success('Staff member updated successfully');
       return updatedStaff;
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to update staff');
-      toast.error(error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to update staff';
+      console.error('Error updating staff:', error);
+      setError(new Error(message));
+      toast.error(message);
       throw error;
     }
-  }
+  };
 
-  async function deleteStaff(id: string) {
+  const deleteStaff = async (id: string) => {
     try {
       const { error } = await supabase
         .from('staff')
@@ -269,14 +305,18 @@ export function useStaff() {
         .eq('id', id);
         
       if (error) throw error;
+      
       setStaff(prev => prev.filter(s => s.id !== id));
+      setError(null);
       toast.success('Staff member deleted successfully');
-    } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to delete staff');
-      toast.error(error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to delete staff';
+      console.error('Error deleting staff:', error);
+      setError(new Error(message));
+      toast.error(message);
       throw error;
     }
-  }
+  };
 
   return {
     staff,

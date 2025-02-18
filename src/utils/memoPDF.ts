@@ -21,8 +21,6 @@ export function generateMemoPDF(companyName: string, memo: MemoWithDetails) {
     y += PDF_CONSTANTS.LINE_HEIGHT;
 
     // Memo Title
-    const title = `ACHIEVEMENT MEMO - ${getMemoTypeLabel(memo.type)}`;
-    y = PDFHelpers.addCenteredText(doc, title, y, PDF_CONSTANTS.FONT_SIZES.SUBTITLE, true);
     y += PDF_CONSTANTS.LINE_HEIGHT * 2;
 
     // Recipient Details

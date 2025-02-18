@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Department, DepartmentFormData } from '../types/department';
+import { toast } from 'react-hot-toast';
 import { useSupabase } from '../providers/SupabaseProvider';
 
 export function useDepartments() {
@@ -8,7 +9,7 @@ export function useDepartments() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  async function loadDepartments() {
+  const loadDepartments = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -16,20 +17,23 @@ export function useDepartments() {
         .select('*')
         .order('name');
         
-      if (error) throw new Error(`Failed to fetch departments: ${error.message}`);
-      setDepartments(data);
+      if (error) throw error;
+      setDepartments(data || []);
+      setError(null);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load departments'));
+      const error = err instanceof Error ? err : new Error('Failed to load departments');
+      setError(error);
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     loadDepartments();
   }, []);
 
-  async function addDepartment(department: DepartmentFormData) {
+  const addDepartment = async (department: DepartmentFormData) => {
     try {
       const { data, error } = await supabase
         .from('departments')
@@ -37,15 +41,24 @@ export function useDepartments() {
         .select()
         .single();
         
-      if (error) throw new Error(`Failed to create department: ${error.message}`);
+      if (error) {
+        if (error.code === '23505') { // Unique violation
+          throw new Error('A department with this name already exists');
+        }
+        throw error;
+      }
+
       setDepartments(prev => [...prev, data]);
+      setError(null);
       return data;
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to add department');
+      const error = err instanceof Error ? err : new Error('Failed to add department');
+      setError(error);
+      throw error;
     }
-  }
+  };
 
-  async function updateDepartment(id: string, updates: Partial<DepartmentFormData>) {
+  const updateDepartment = async (id: string, updates: Partial<DepartmentFormData>) => {
     try {
       const { data, error } = await supabase
         .from('departments')
@@ -54,31 +67,45 @@ export function useDepartments() {
         .select()
         .single();
         
-      if (error) throw new Error(`Failed to update department: ${error.message}`);
+      if (error) {
+        if (error.code === '23505') { // Unique violation
+          throw new Error('A department with this name already exists');
+        }
+        throw error;
+      }
+
       setDepartments(prev => prev.map(dept => dept.id === id ? data : dept));
+      setError(null);
       return data;
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to update department');
+      const error = err instanceof Error ? err : new Error('Failed to update department');
+      setError(error);
+      throw error;
     }
-  }
+  };
 
-  async function deleteDepartment(id: string) {
+  const deleteDepartment = async (id: string) => {
     try {
-      const { error } = await supabase
-        .rpc('delete_department', { p_department_id: id });
+      const { error } = await supabase.rpc('delete_department', {
+        p_department_id: id
+      });
         
       if (error) {
         // Check for specific error about staff members
         if (error.message.includes('has staff members')) {
           throw new Error('Cannot delete department that has staff members assigned to it');
         }
-        throw new Error(`Failed to delete department: ${error.message}`);
+        throw error;
       }
+
       setDepartments(prev => prev.filter(dept => dept.id !== id));
+      setError(null);
     } catch (err) {
-      throw err instanceof Error ? err : new Error('Failed to delete department');
+      const error = err instanceof Error ? err : new Error('Failed to delete department');
+      setError(error);
+      throw error;
     }
-  }
+  };
 
   return {
     departments,
