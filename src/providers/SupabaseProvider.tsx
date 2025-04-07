@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Define the context type
