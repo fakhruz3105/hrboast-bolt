@@ -17,12 +17,11 @@ interface SupabaseProviderProps {
   children: ReactNode;
 }
 
-// Supabase Provider Component
 export const SupabaseProvider: React.FC<SupabaseProviderProps> = ({
   children,
 }) => {
-  const [supabaseUrl, setSupabaseUrl] = useState('');
-  const [supabaseKey, setSupabaseKey] = useState('');
+  const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     const fetchSupabaseEnv = async () => {
@@ -41,23 +40,21 @@ export const SupabaseProvider: React.FC<SupabaseProviderProps> = ({
           throw error;
         }
   
-        setSupabaseUrl(data.supabase_url);
-        setSupabaseKey(data.supabase_anon_key);
+        const supabaseClient = createClient(data.supabase_url, data.supabase_anon_key);
+        setSupabase(supabaseClient);
       } catch (error) {
         console.error('Error fetching tenant data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchSupabaseEnv();
   }, []);
 
-  const supabase = useMemo(() => {
-    if (!supabaseUrl || !supabaseKey) {
-      return null;
-    }
-
-    return createClient(supabaseUrl, supabaseKey);
-  }, [supabaseUrl, supabaseKey]);
+  if (loading) {
+    return <div>Loading...</div>; // Loading indicator or spinner
+  }
   
   return (
     <SupabaseContext.Provider value={supabase}>
