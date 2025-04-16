@@ -13,11 +13,15 @@ export function useStaffLevels() {
       setLoading(true);
       const { data, error } = await supabase
         .from('staff_levels')
-        .select('*')
+        .select(`
+          *,
+          role_mappings (
+            id
+          )
+        `)
         .order('rank');
         
       if (error) throw new Error(`Failed to fetch staff levels: ${error.message}`);
-
       setLevels(data);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to load staff levels'));

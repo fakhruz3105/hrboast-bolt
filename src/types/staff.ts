@@ -32,3 +32,16 @@ export type Staff = {
     role: string;
   };
 };
+
+export type StaffFormData = {
+  name: string;
+  phone_number: string;
+  email: string;
+  department_ids: string[];
+  primary_department_id: string;
+  level_ids: string[];
+  primary_level_id: string;
+  join_date: string;
+  status: string;
+  role_id: string;
+}

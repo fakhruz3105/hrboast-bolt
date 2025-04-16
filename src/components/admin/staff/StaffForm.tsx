@@ -102,8 +102,8 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
       newErrors.level_ids = 'At least one level is required';
     }
 
-    if (!formData.primary_level_id) {
-      newErrors.primary_level_id = 'Primary level is required';
+    if (!formData.role_id) {
+      newErrors.role_id = 'Primary level is required';
     }
 
     setErrors(newErrors);
@@ -151,13 +151,11 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
 
     // Get role ID from the primary level
     const level = levels.find(l => l.id === (newLevelIds.includes(levelId) ? levelId : newLevelIds[0]));
-    const roleId = level?.role_id || '';
 
     setFormData({
       ...formData,
       level_ids: newLevelIds,
       primary_level_id: newPrimaryLevelId,
-      role_id: roleId
     });
   };
 
@@ -266,19 +264,20 @@ export default function StaffForm({ initialData, departments, levels, onSubmit, 
         <select
           required
           className={`mt-1 block w-full rounded-md border ${
-            errors.primary_level_id ? 'border-red-500' : 'border-gray-300'
+            errors.role_id ? 'border-red-500' : 'border-gray-300'
           } px-3 py-2`}
-          value={formData.primary_level_id}
-          onChange={(e) => setFormData({ ...formData, primary_level_id: e.target.value })}
+          value={formData.role_id}
+          onChange={(e) => setFormData({ ...formData, role_id: e.target.value })}
         >
           <option value="">Select Primary Level</option>
           {levels
             .filter(level => formData.level_ids.includes(level.id))
+            .filter(level => level.role_mappings)
             .map((level) => (
-              <option key={level.id} value={level.id}>{level.name}</option>
+              <option key={level.id} value={level.role_mappings!.id}>{level.name}</option>
             ))}
         </select>
-        {errors.primary_level_id && <p className="mt-1 text-sm text-red-500">{errors.primary_level_id}</p>}
+        {errors.role_id && <p className="mt-1 text-sm text-red-500">{errors.role_id}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
